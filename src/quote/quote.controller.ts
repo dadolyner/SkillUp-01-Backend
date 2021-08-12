@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateQuoteDto } from './dto/create-quote.dto';
-import { Quote } from './quote.entity';
+import { Quote } from '../entities/quote.entity';
 import { QuoteService } from './quote.service';
 
 @UseGuards(AuthGuard())

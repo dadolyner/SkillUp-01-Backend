@@ -4,8 +4,10 @@ import {
   Column,
   BaseEntity,
   Unique,
+  OneToMany,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Vote } from './vote.entity';
 
 @Entity()
 @Unique(['username'])
@@ -26,4 +28,8 @@ export class User extends BaseEntity {
     const hash = await bcrypt.hash(password, this.salt);
     return hash === this.password;
   }
+
+  //relation
+  @OneToMany(() => Vote, (vote) => vote.user, { eager: true }) //relation to votes
+  votes: Vote[];
 }

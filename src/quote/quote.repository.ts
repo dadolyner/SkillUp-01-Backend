@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateQuoteDto } from './dto/create-quote.dto';
-import { Quote } from './quote.entity';
+import { Quote } from '../entities/quote.entity';
 
 @EntityRepository(Quote)
 export class QuoteRepository extends Repository<Quote> {
