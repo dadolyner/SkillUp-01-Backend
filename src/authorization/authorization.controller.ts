@@ -16,11 +16,11 @@ export class AuthorizationController {
   }
 
   //post request for signin
-  @Post('/signin')
-  signIn(
+  @Post('/login')
+  logIn(
     @Body(ValidationPipe)
     authorizationCredentialsDto: AuthorizationCredentialsDto,
   ): Promise<{ accesToken: string }> {
-    return this.authorizationService.signIn(authorizationCredentialsDto);
+    return this.authorizationService.logIn(authorizationCredentialsDto);
   }
 }
