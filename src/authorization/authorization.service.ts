@@ -21,7 +21,7 @@ export class AuthorizationService {
   }
 
   //signin - login with jwt tokens
-  async signIn(
+  async logIn(
     authorizationCredentialsDto: AuthorizationCredentialsDto,
   ): Promise<{ accesToken: string }> {
     const username = await this.userRepository.validateUserPassword(
