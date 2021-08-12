@@ -4,7 +4,7 @@ import { UserCredentialsDto } from './dto/user-credentials.dto';
 
 @Controller('user')
 export class UserController {
-  constructor(private authorizationService: UserService) {}
+  constructor(private userService: UserService) {}
 
   //post request for signup
   @Post('/signup')
@@ -12,7 +12,7 @@ export class UserController {
     @Body(ValidationPipe)
     userCredentialsDto: UserCredentialsDto,
   ): Promise<void> {
-    return this.authorizationService.signUp(userCredentialsDto);
+    return this.userService.signUp(userCredentialsDto);
   }
 
   //post request for signin
@@ -21,6 +21,6 @@ export class UserController {
     @Body(ValidationPipe)
     userCredentialsDto: UserCredentialsDto,
   ): Promise<{ accesToken: string }> {
-    return this.authorizationService.logIn(userCredentialsDto);
+    return this.userService.logIn(userCredentialsDto);
   }
 }
