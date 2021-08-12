@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   UseGuards,
   UsePipes,
@@ -22,19 +23,22 @@ import { User } from 'src/entities/user.entity';
 export class QuoteController {
   constructor(private quoteService: QuoteService) {}
 
+  //return all quotes
   @Get('/allQuotes')
   getQuotes(): Promise<Quote[]> {
     return this.quoteService.getQuotes();
   }
 
-  /* @Get('/:id')
+  //return one specific quote
+  @Get('/:id')
   getTaskId(
     @Param('id', new ParseUUIDPipe()) id: string,
     @GetUser() user: User,
   ): Promise<Quote> {
     return this.quoteService.getQuoteById(id, user);
-  } */
+  }
 
+  //create a new quote
   @Post('/createQuote')
   @UsePipes(ValidationPipe)
   createQuote(
@@ -44,8 +48,22 @@ export class QuoteController {
     return this.quoteService.createQuote(createQuoteDto, user);
   }
 
+  //delete an existing quote
   @Delete('/:id')
-  deleteQuote(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
-    return this.quoteService.deleteQuote(id);
+  deleteQuote(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @GetUser() user: User,
+  ): Promise<void> {
+    return this.quoteService.deleteQuote(id, user);
+  }
+
+  //update an existing quote
+  @Patch('/:id/myQuote')
+  updateTaskStatus(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Body() quote: string,
+    @GetUser() user: User,
+  ): Promise<Quote> {
+    return this.quoteService.updateTaskStatus(id, quote, user);
   }
 }

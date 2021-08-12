@@ -1,8 +1,8 @@
+import { Exclude } from 'class-transformer';
 import {
   BaseEntity,
   Column,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -19,10 +19,10 @@ export class Quote extends BaseEntity {
   quote: string;
 
   //relation
-  @OneToMany(() => Vote, (vote) => vote.quote) //relation to votes
+  @OneToMany(() => Vote, (vote) => vote.quote)
   votes: Vote[];
 
   @ManyToOne(() => User, (user) => user.quote)
-  @JoinColumn()
+  @Exclude({ toPlainOnly: true })
   user: User;
 }
