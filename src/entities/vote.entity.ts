@@ -21,10 +21,10 @@ export class Vote extends BaseEntity {
   votes: number;
 
   //relation
-  @ManyToOne(() => User, (user) => user.votes, { eager: false })
+  @ManyToOne(() => User, (user) => user.votes)
   @Exclude({ toPlainOnly: true })
   user: User;
 
-  @ManyToOne(() => Quote, (quotes) => quotes.votes, { eager: false })
+  @ManyToOne(() => Quote, (quotes) => quotes.votes)
   quotes: Quote;
 }

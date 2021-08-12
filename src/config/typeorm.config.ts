@@ -6,11 +6,11 @@ import { Vote } from '../entities/vote.entity';
 //config file za povezavo na database
 export const typeOrmCOnfig: TypeOrmModuleOptions = {
   type: 'postgres',
-  host: 'localhost',
+  host: '194.249.251.33',
   port: 5432,
-  username: 'postgres',
-  password: 'postgres',
-  database: 'SkillUp-01',
-  entities: [User, Quote, Vote], //entititete katere so shranjene v datotekah
+  username: 'skillup0103',
+  password: 'Pr3s3nt-85',
+  database: 'Skulj_SkillUp_01',
+  entities: [User, Quote, Vote],
   synchronize: true,
 };

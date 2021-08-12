@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 import { Quote } from '../entities/quote.entity';
@@ -17,5 +26,10 @@ export class QuoteController {
   @Post('/createQuote')
   createQuote(@Body() createQuoteDto: CreateQuoteDto): Promise<Quote> {
     return this.quoteService.createQuote(createQuoteDto);
+  }
+
+  @Delete('/:id')
+  deleteQuote(@Param('id', new ParseUUIDPipe()) id: string): Promise<void> {
+    return this.quoteService.deleteQuote(id);
   }
 }

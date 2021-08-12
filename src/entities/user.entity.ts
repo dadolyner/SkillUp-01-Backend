@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Vote } from './vote.entity';
+import { Quote } from './quote.entity';
 
 @Entity()
 @Unique(['username'])
@@ -30,6 +31,9 @@ export class User extends BaseEntity {
   }
 
   //relation
-  @OneToMany(() => Vote, (vote) => vote.user, { eager: true }) //relation to votes
+  @OneToMany(() => Vote, (vote) => vote.user) //relation to votes
   votes: Vote[];
+
+  @OneToMany(() => Quote, (quote) => quote.user) //relation to votes
+  quote: Quote[];
 }
