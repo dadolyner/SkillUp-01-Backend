@@ -16,10 +16,6 @@ export class QuoteService {
     return this.quoteRepository.getQuotes();
   }
 
-  async createQuote(createQuoteDto: CreateQuoteDto): Promise<Quote> {
-    return this.quoteRepository.createQuote(createQuoteDto);
-  }
-
   async getQuoteById(id: number, user: User): Promise<Quote> {
     const found = await this.quoteRepository.findOne({ where: { id, user } });
 
@@ -28,6 +24,13 @@ export class QuoteService {
     }
 
     return found;
+  }
+
+  async createQuote(
+    createQuoteDto: CreateQuoteDto,
+    user: User,
+  ): Promise<Quote> {
+    return this.quoteRepository.createQuote(createQuoteDto, user);
   }
 
   async deleteQuote(id: string): Promise<void> {

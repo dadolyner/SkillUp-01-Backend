@@ -31,9 +31,9 @@ export class User extends BaseEntity {
   }
 
   //relation
-  @OneToMany(() => Vote, (vote) => vote.user) //relation to votes
+  @OneToMany(() => Vote, (vote) => vote.user)
   votes: Vote[];
 
-  @OneToMany(() => Quote, (quote) => quote.user) //relation to votes
+  @OneToMany(() => Quote, (quote) => quote.user)
   quote: Quote[];
 }

@@ -7,11 +7,15 @@ import {
   ParseUUIDPipe,
   Post,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 import { Quote } from '../entities/quote.entity';
 import { QuoteService } from './quote.service';
+import { GetUser } from 'src/user/get-user.decorator';
+import { User } from 'src/entities/user.entity';
 
 @UseGuards(AuthGuard())
 @Controller('quote')
@@ -23,9 +27,21 @@ export class QuoteController {
     return this.quoteService.getQuotes();
   }
 
+  /* @Get('/:id')
+  getTaskId(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @GetUser() user: User,
+  ): Promise<Quote> {
+    return this.quoteService.getQuoteById(id, user);
+  } */
+
   @Post('/createQuote')
-  createQuote(@Body() createQuoteDto: CreateQuoteDto): Promise<Quote> {
-    return this.quoteService.createQuote(createQuoteDto);
+  @UsePipes(ValidationPipe)
+  createQuote(
+    @Body() createQuoteDto: CreateQuoteDto,
+    @GetUser() user: User,
+  ): Promise<Quote> {
+    return this.quoteService.createQuote(createQuoteDto, user);
   }
 
   @Delete('/:id')
