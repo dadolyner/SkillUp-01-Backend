@@ -7,4 +7,10 @@ export class Quote extends BaseEntity {
 
   @Column()
   quote: string;
+
+  @Column({ default: 0 })
+  upvotes: number;
+
+  @Column({ default: 0 })
+  downvotes: number;
 }
