@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { AuthorizationService } from './authorization.service';
-import { AuthorizationController } from './authorization.controller';
+import { UserService } from './user.service';
+import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
 import { PassportModule } from '@nestjs/passport';
@@ -16,8 +16,8 @@ import { JwtStrategy } from './jwt/jwt.strategy';
       signOptions: { expiresIn: 3600 },
     }),
   ],
-  controllers: [AuthorizationController],
-  providers: [AuthorizationService, JwtStrategy],
+  controllers: [UserController],
+  providers: [UserService, JwtStrategy],
   exports: [JwtStrategy, PassportModule],
 })
-export class AuthorizationModule {}
+export class UserModule {}

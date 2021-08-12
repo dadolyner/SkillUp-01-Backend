@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthorizationModule } from './authorization/authorization.module';
+import { AuthorizationModule } from './user/user.module';
 import { typeOrmCOnfig } from './config/typeorm.config';
 import { QuoteModule } from './quote/quote.module';
 
