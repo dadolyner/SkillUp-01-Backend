@@ -1,6 +1,15 @@
-import { Body, Controller, Patch, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Patch,
+  Post,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserCredentialsDto } from './dto/user-credentials.dto';
+import { UserLoginCredentialsDto } from './dto/user-credentials-login.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { UserSignUpCredentialsDto } from './dto/user-credentials-signup.dto';
 
 @Controller('user')
 export class UserController {
@@ -10,25 +19,26 @@ export class UserController {
   @Post('/signup')
   signUp(
     @Body(ValidationPipe)
-    userCredentialsDto: UserCredentialsDto,
+    userSignupCredentialsDto: UserSignUpCredentialsDto,
   ): Promise<void> {
-    return this.userService.signUp(userCredentialsDto);
+    return this.userService.signUp(userSignupCredentialsDto);
   }
 
   //post request for signin
   @Post('/login')
   logIn(
     @Body(ValidationPipe)
-    userCredentialsDto: UserCredentialsDto,
+    userCredentialsDto: UserLoginCredentialsDto,
   ): Promise<{ accesToken: string }> {
     return this.userService.logIn(userCredentialsDto);
   }
 
   //update request for update password
+  @UseGuards(AuthGuard())
   @Patch('/me/update-password')
   updatePassword(
     @Body(ValidationPipe)
-    userCredentialsDto: UserCredentialsDto,
+    userCredentialsDto: UserLoginCredentialsDto,
   ): Promise<void> {
     return this.userService.updatePassword(userCredentialsDto);
   }

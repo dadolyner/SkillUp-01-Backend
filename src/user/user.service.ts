@@ -4,11 +4,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserCredentialsDto } from './dto/user-credentials.dto';
+import { UserLoginCredentialsDto } from './dto/user-credentials-login.dto';
 import { UserRepository } from './user.repository';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt/jwt-payload.interface';
 import { User } from 'src/entities/user.entity';
+import { UserSignUpCredentialsDto } from './dto/user-credentials-signup.dto';
 
 @Injectable()
 export class UserService {
@@ -30,13 +31,13 @@ export class UserService {
   }
 
   //signup - registration
-  async signUp(userCredentialsDto: UserCredentialsDto): Promise<void> {
-    return this.userRepository.signUp(userCredentialsDto);
+  async signUp(signupCredentials: UserSignUpCredentialsDto): Promise<void> {
+    return this.userRepository.signUp(signupCredentials);
   }
 
   //signin - login with jwt tokens
   async logIn(
-    userCredentialsDto: UserCredentialsDto,
+    userCredentialsDto: UserLoginCredentialsDto,
   ): Promise<{ accesToken: string }> {
     const username = await this.userRepository.validateUserPassword(
       userCredentialsDto,
@@ -53,7 +54,9 @@ export class UserService {
   }
 
   //updates user password
-  async updatePassword(userCredentialsDto: UserCredentialsDto): Promise<void> {
+  async updatePassword(
+    userCredentialsDto: UserLoginCredentialsDto,
+  ): Promise<void> {
     return this.userRepository.updatePassword(userCredentialsDto);
   }
 }

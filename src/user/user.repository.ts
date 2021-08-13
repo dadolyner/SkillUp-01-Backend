@@ -4,18 +4,24 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
-import { UserCredentialsDto } from './dto/user-credentials.dto';
+import { UserLoginCredentialsDto } from './dto/user-credentials-login.dto';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { UserSignUpCredentialsDto } from './dto/user-credentials-signup.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   //signup our user into the database
-  async signUp(userCredentialsDto: UserCredentialsDto): Promise<void> {
-    const { username, password } = userCredentialsDto;
+  async signUp(signupCredentials: UserSignUpCredentialsDto): Promise<void> {
+    const { first_name, last_name, email, birthDate, username, password } =
+      signupCredentials;
 
     const user = new User();
+    user.first_name = first_name;
+    user.last_name = last_name;
     user.username = username;
+    user.email = email;
+    user.birthDate = birthDate;
     user.salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(password, user.salt);
 
@@ -31,7 +37,9 @@ export class UserRepository extends Repository<User> {
   }
 
   //update user password
-  async updatePassword(userCredentialsDto: UserCredentialsDto): Promise<void> {
+  async updatePassword(
+    userCredentialsDto: UserLoginCredentialsDto,
+  ): Promise<void> {
     const { username, password } = userCredentialsDto;
     const user = await this.findOne({ username });
 
@@ -47,7 +55,7 @@ export class UserRepository extends Repository<User> {
 
   //validate inserted password
   async validateUserPassword(
-    userCredentialsDto: UserCredentialsDto,
+    userCredentialsDto: UserLoginCredentialsDto,
   ): Promise<string> {
     const { username, password } = userCredentialsDto;
     const user = await this.findOne({ username });
