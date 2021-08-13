@@ -1,4 +1,4 @@
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Patch, Post, ValidationPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserCredentialsDto } from './dto/user-credentials.dto';
 
@@ -22,5 +22,14 @@ export class UserController {
     userCredentialsDto: UserCredentialsDto,
   ): Promise<{ accesToken: string }> {
     return this.userService.logIn(userCredentialsDto);
+  }
+
+  //update request for update password
+  @Patch('/me/update-password')
+  updatePassword(
+    @Body(ValidationPipe)
+    userCredentialsDto: UserCredentialsDto,
+  ): Promise<void> {
+    return this.userService.updatePassword(userCredentialsDto);
   }
 }

@@ -1,6 +1,7 @@
 import {
   ConflictException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { UserCredentialsDto } from './dto/user-credentials.dto';
@@ -9,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+  //signup our user into the database
   async signUp(userCredentialsDto: UserCredentialsDto): Promise<void> {
     const { username, password } = userCredentialsDto;
 
@@ -28,7 +30,22 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  //potrditi preveri če je bilo vneseno pravilno geslo
+  //update user password
+  async updatePassword(userCredentialsDto: UserCredentialsDto): Promise<void> {
+    const { username, password } = userCredentialsDto;
+    const user = await this.findOne({ username });
+
+    if (!user) {
+      throw new NotFoundException(
+        `Unable to find user with Username "${username}".`,
+      );
+    } else {
+      user.password = await this.hashPassword(password, user.salt);
+      await this.save(user);
+    }
+  }
+
+  //validate inserted password
   async validateUserPassword(
     userCredentialsDto: UserCredentialsDto,
   ): Promise<string> {
@@ -42,7 +59,7 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  //kriprieanje gesla
+  //hash password
   private hashPassword(password: string, salt: string) {
     return bcrypt.hash(password, salt);
   }

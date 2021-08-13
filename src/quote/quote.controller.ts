@@ -29,7 +29,7 @@ export class QuoteController {
     return this.quoteService.getQuotes();
   }
 
-  //return one specific quote
+  //post request to return one specific quote
   @Get('/:id')
   getTaskId(
     @Param('id', new ParseUUIDPipe()) id: string,
@@ -38,7 +38,7 @@ export class QuoteController {
     return this.quoteService.getQuoteById(id, user);
   }
 
-  //create a new quote
+  //post request to create a new quote
   @Post('/createQuote')
   @UsePipes(ValidationPipe)
   createQuote(
@@ -48,8 +48,8 @@ export class QuoteController {
     return this.quoteService.createQuote(createQuoteDto, user);
   }
 
-  //delete an existing quote
-  @Delete('/:id')
+  //delete request to delete an existing quote
+  @Delete('/:id/myQuote/delete')
   deleteQuote(
     @Param('id', new ParseUUIDPipe()) id: string,
     @GetUser() user: User,
@@ -57,13 +57,13 @@ export class QuoteController {
     return this.quoteService.deleteQuote(id, user);
   }
 
-  //update an existing quote
-  @Patch('/:id/myQuote')
+  //update request to update an existing quote
+  @Patch('/:id/myQuote/edit')
   updateTaskStatus(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() quote: string,
     @GetUser() user: User,
   ): Promise<Quote> {
-    return this.quoteService.updateTaskStatus(id, quote, user);
+    return this.quoteService.updateQuote(id, quote, user);
   }
 }

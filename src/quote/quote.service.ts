@@ -46,13 +46,9 @@ export class QuoteService {
   }
 
   //update user created quote
-  async updateTaskStatus(
-    id: string,
-    quote: string,
-    user: User,
-  ): Promise<Quote> {
+  async updateQuote(id: string, quote: string, user: User): Promise<Quote> {
     const myQuote = await this.getQuoteById(id, user);
-    myQuote.quote = quote;
+    myQuote.quote = Object.values(quote)[0];
     myQuote.user = user;
     await myQuote.save();
 
