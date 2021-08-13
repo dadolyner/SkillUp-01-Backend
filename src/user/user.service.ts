@@ -59,4 +59,18 @@ export class UserService {
   ): Promise<void> {
     return this.userRepository.updatePassword(userCredentialsDto);
   }
+
+  //outputs user info without sensitive data
+  async getUserInfo(username: string) {
+    const found = await this.userRepository.findOne({ where: { username } });
+
+    const keys = Object.keys(found);
+    keys.forEach((key) => {
+      if (key == 'id' || key == 'salt' || key == 'password') {
+        delete found[key];
+      }
+    });
+
+    return found;
+  }
 }

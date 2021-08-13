@@ -31,7 +31,7 @@ export class QuoteController {
 
   //post request to return one specific quote
   @Get('/:id')
-  getTaskId(
+  getQuoteId(
     @Param('id', new ParseUUIDPipe()) id: string,
     @GetUser() user: User,
   ): Promise<Quote> {
@@ -59,7 +59,7 @@ export class QuoteController {
 
   //update request to update an existing quote
   @Patch('/:id/myQuote/edit')
-  updateTaskStatus(
+  updateQuote(
     @Param('id', new ParseUUIDPipe()) id: string,
     @Body() quote: string,
     @GetUser() user: User,

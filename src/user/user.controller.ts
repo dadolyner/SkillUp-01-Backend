@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Patch,
   Post,
   UseGuards,
@@ -10,6 +12,7 @@ import { UserService } from './user.service';
 import { UserLoginCredentialsDto } from './dto/user-credentials-login.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { UserSignUpCredentialsDto } from './dto/user-credentials-signup.dto';
+import { User } from 'src/entities/user.entity';
 
 @Controller('user')
 export class UserController {
@@ -41,5 +44,12 @@ export class UserController {
     userCredentialsDto: UserLoginCredentialsDto,
   ): Promise<void> {
     return this.userService.updatePassword(userCredentialsDto);
+  }
+
+  //get user information
+  @UseGuards(AuthGuard())
+  @Get('/:username/me')
+  getUserInfo(@Param('username') username: string): Promise<User> {
+    return this.userService.getUserInfo(username);
   }
 }
