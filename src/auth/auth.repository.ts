@@ -3,15 +3,15 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
-import { UserLoginCredentialsDto } from './dto/auth-credentials-login.dto';
+import { AuthLoginCredentialsDto } from './dto/auth-credentials-login.dto';
 import { User } from '../entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { UserSignUpCredentialsDto } from './dto/auth-credentials-signup.dto';
+import { AuthSignUpCredentialsDto } from './dto/auth-credentials-signup.dto';
 
 @EntityRepository(User)
 export class AuthRepository extends Repository<User> {
   //signup our user into the database
-  async signUp(signupCredentials: UserSignUpCredentialsDto): Promise<void> {
+  async signUp(signupCredentials: AuthSignUpCredentialsDto): Promise<void> {
     const { first_name, last_name, email, birthDate, username, password } =
       signupCredentials;
 
@@ -37,7 +37,7 @@ export class AuthRepository extends Repository<User> {
 
   //validate inserted password
   async validateUserPassword(
-    userCredentialsDto: UserLoginCredentialsDto,
+    userCredentialsDto: AuthLoginCredentialsDto,
   ): Promise<string> {
     const { username, password } = userCredentialsDto;
     const user = await this.findOne({ username });

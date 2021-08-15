@@ -17,7 +17,8 @@ import { Quote } from '../entities/quote.entity';
 import { UserService } from './user.service';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/entities/user.entity';
-import { UserLoginCredentialsDto } from 'src/auth/dto/auth-credentials-login.dto';
+import { AuthLoginCredentialsDto } from 'src/auth/dto/auth-credentials-login.dto';
+import { AuthSignUpCredentialsDto } from 'src/auth/dto/auth-credentials-signup.dto';
 
 @UseGuards(AuthGuard())
 @Controller('user')
@@ -69,19 +70,17 @@ export class UserController {
   }
 
   //update request for update password
-  @UseGuards(AuthGuard())
   @Patch('/me/update-password')
   updatePassword(
     @Body(ValidationPipe)
-    userCredentialsDto: UserLoginCredentialsDto,
+    userCredentialsDto: AuthLoginCredentialsDto,
   ): Promise<void> {
     return this.userService.updatePassword(userCredentialsDto);
   }
 
   //get user information
-  @UseGuards(AuthGuard())
-  @Get('/:username/me')
-  getUserInfo(@Param('username') username: string) {
-    return this.userService.getUserInfo(username);
+  @Get('/me')
+  getUserInfo(@GetUser() user: User, authSignupDto: AuthSignUpCredentialsDto) {
+    return this.userService.getUserInfo(authSignupDto, user);
   }
 }

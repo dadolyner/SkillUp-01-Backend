@@ -4,15 +4,14 @@ import { CreateQuoteDto } from './dto/create-quote.dto';
 import { Quote } from '../entities/quote.entity';
 import { UserRepository } from './user.repository';
 import { User } from '../entities/user.entity';
-import { UserLoginCredentialsDto } from 'src/auth/dto/auth-credentials-login.dto';
-import { AuthRepository } from 'src/auth/auth.repository';
+import { AuthLoginCredentialsDto } from 'src/auth/dto/auth-credentials-login.dto';
+import { AuthSignUpCredentialsDto } from 'src/auth/dto/auth-credentials-signup.dto';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-    private authRepository: AuthRepository,
   ) {}
 
   //return all quotes
@@ -64,22 +63,20 @@ export class UserService {
 
   //updates user password
   async updatePassword(
-    userCredentialsDto: UserLoginCredentialsDto,
+    authCredentialsDto: AuthLoginCredentialsDto,
   ): Promise<void> {
-    return this.userRepository.updatePassword(userCredentialsDto);
+    return this.userRepository.updatePassword(authCredentialsDto);
   }
 
   //outputs user info without sensitive data
-  async getUserInfo(username: string) {
-    const found = await this.authRepository.findOne({ where: { username } });
+  async getUserInfo(authSignupDto: AuthSignUpCredentialsDto, user: User) {
+    return this.userRepository.getUser(authSignupDto, user);
 
-    const keys = Object.keys(found);
+    /* const keys = Object.keys(found);
     keys.forEach((key) => {
       if (key == 'id' || key == 'salt' || key == 'password') {
         delete found[key];
       }
-    });
-
-    return found;
+    }); */
   }
 }
