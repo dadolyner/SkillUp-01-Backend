@@ -37,3 +37,4 @@ lerna-debug.log*
 # AddOns
 .prettierrc
 src/config
+src/entities
