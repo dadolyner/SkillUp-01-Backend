@@ -1,39 +1,27 @@
-import {
-  ConflictException,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
-import { UserLoginCredentialsDto } from './dto/user-credentials-login.dto';
-import { User } from '../entities/user.entity';
+import { CreateQuoteDto } from './dto/create-quote.dto';
+import { Quote } from '../entities/quote.entity';
+import { User } from 'src/entities/user.entity';
+import { UserLoginCredentialsDto } from 'src/auth/dto/auth-credentials-login.dto';
+import { NotFoundException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { UserSignUpCredentialsDto } from './dto/user-credentials-signup.dto';
 
-@EntityRepository(User)
-export class UserRepository extends Repository<User> {
-  //signup our user into the database
-  async signUp(signupCredentials: UserSignUpCredentialsDto): Promise<void> {
-    const { first_name, last_name, email, birthDate, username, password } =
-      signupCredentials;
+@EntityRepository(Quote)
+export class UserRepository extends Repository<Quote> {
+  async getQuotes(): Promise<Quote[]> {
+    const query = this.createQueryBuilder('quote');
+    const quotes = await query.getMany();
+    return quotes;
+  }
 
-    const user = new User();
-    user.first_name = first_name;
-    user.last_name = last_name;
-    user.username = username;
-    user.email = email;
-    user.birthDate = birthDate;
-    user.salt = await bcrypt.genSalt();
-    user.password = await this.hashPassword(password, user.salt);
-
-    try {
-      await this.save(user);
-    } catch (error) {
-      if (error.code == 23505) {
-        throw new ConflictException('Username already exist!');
-      } else {
-        throw new InternalServerErrorException();
-      }
-    }
+  async createQuote(
+    createQuoteDto: CreateQuoteDto,
+    user: User,
+  ): Promise<Quote> {
+    const { quote } = createQuoteDto;
+    const myQuote = this.create({ quote, user });
+    await this.save(myQuote);
+    return myQuote;
   }
 
   //update user password
@@ -41,7 +29,7 @@ export class UserRepository extends Repository<User> {
     userCredentialsDto: UserLoginCredentialsDto,
   ): Promise<void> {
     const { username, password } = userCredentialsDto;
-    const user = await this.findOne({ username });
+    const user = await User.findOne({ username });
 
     if (!user) {
       throw new NotFoundException(
@@ -49,21 +37,7 @@ export class UserRepository extends Repository<User> {
       );
     } else {
       user.password = await this.hashPassword(password, user.salt);
-      await this.save(user);
-    }
-  }
-
-  //validate inserted password
-  async validateUserPassword(
-    userCredentialsDto: UserLoginCredentialsDto,
-  ): Promise<string> {
-    const { username, password } = userCredentialsDto;
-    const user = await this.findOne({ username });
-
-    if (user && (await user.validatePassword(password))) {
-      return user.username;
-    } else {
-      return null;
+      await User.save(user);
     }
   }
 

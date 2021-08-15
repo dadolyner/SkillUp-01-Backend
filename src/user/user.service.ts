@@ -1,26 +1,27 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserLoginCredentialsDto } from './dto/user-credentials-login.dto';
+import { CreateQuoteDto } from './dto/create-quote.dto';
+import { Quote } from '../entities/quote.entity';
 import { UserRepository } from './user.repository';
-import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './jwt/jwt-payload.interface';
-import { User } from 'src/entities/user.entity';
-import { UserSignUpCredentialsDto } from './dto/user-credentials-signup.dto';
+import { User } from '../entities/user.entity';
+import { UserLoginCredentialsDto } from 'src/auth/dto/auth-credentials-login.dto';
+import { AuthRepository } from 'src/auth/auth.repository';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-    private jwtService: JwtService,
+    private authRepository: AuthRepository,
   ) {}
 
+  //return all quotes
+  getQuotes(): Promise<Quote[]> {
+    return this.userRepository.getQuotes();
+  }
+
   //return one specific quote
-  async getUserById(id: string, user: User): Promise<User> {
+  async getQuoteById(id: string, user: User): Promise<Quote> {
     const found = await this.userRepository.findOne({ where: { id, user } });
 
     if (!found) {
@@ -30,27 +31,35 @@ export class UserService {
     return found;
   }
 
-  //signup - registration
-  async signUp(signupCredentials: UserSignUpCredentialsDto): Promise<void> {
-    return this.userRepository.signUp(signupCredentials);
+  //create a new quote
+  async createQuote(
+    createQuoteDto: CreateQuoteDto,
+    user: User,
+  ): Promise<Quote> {
+    return this.userRepository.createQuote(createQuoteDto, user);
   }
 
-  //signin - login with jwt tokens
-  async logIn(
-    userCredentialsDto: UserLoginCredentialsDto,
-  ): Promise<{ accesToken: string }> {
-    const username = await this.userRepository.validateUserPassword(
-      userCredentialsDto,
-    );
+  //delete an existing quote
+  async deleteQuote(id: string, user: User): Promise<void> {
+    const result = await this.userRepository.delete({ id, user });
 
-    if (!username) {
-      throw new UnauthorizedException('Invalid credentials');
+    if (result.affected === 0) {
+      throw new NotFoundException(`Unable to delete Quote with ID "${id}".`);
+    }
+  }
+
+  //update user created quote
+  async updateQuote(id: string, quote: string, user: User): Promise<Quote> {
+    const myQuote = await this.getQuoteById(id, user);
+    myQuote.quote = Object.values(quote)[0];
+    myQuote.user = user;
+    await myQuote.save();
+
+    if (!myQuote) {
+      throw new NotFoundException(`Unable to edit Quote with ID "${id}".`);
     }
 
-    const payload: JwtPayload = { username };
-    const accesToken = await this.jwtService.sign(payload);
-
-    return { accesToken };
+    return myQuote;
   }
 
   //updates user password
@@ -62,7 +71,7 @@ export class UserService {
 
   //outputs user info without sensitive data
   async getUserInfo(username: string) {
-    const found = await this.userRepository.findOne({ where: { username } });
+    const found = await this.authRepository.findOne({ where: { username } });
 
     const keys = Object.keys(found);
     keys.forEach((key) => {
