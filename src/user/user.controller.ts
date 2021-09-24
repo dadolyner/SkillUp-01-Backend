@@ -1,3 +1,4 @@
+//User/Quote Controller
 import {
   Body,
   Controller,
@@ -80,7 +81,7 @@ export class UserController {
 
   //get user information
   @Get('/me')
-  getUserInfo(@GetUser() user: User, authSignupDto: AuthSignUpCredentialsDto) {
-    return this.userService.getUserInfo(authSignupDto, user);
+  getUserInfo(authSignupDto: AuthSignUpCredentialsDto) {
+    return this.userService.getUserInfo(authSignupDto);
   }
 }

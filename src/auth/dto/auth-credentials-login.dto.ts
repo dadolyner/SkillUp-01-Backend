@@ -1,10 +1,9 @@
+//Data transfer object for logging in
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 export class AuthLoginCredentialsDto {
   @IsString()
-  @MinLength(8)
-  @MaxLength(30)
-  username: string;
+  email: string;
 
   @IsString()
   @MinLength(8)

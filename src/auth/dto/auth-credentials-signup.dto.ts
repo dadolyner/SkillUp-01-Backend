@@ -1,3 +1,4 @@
+//Data Transfer Object for signing up
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 export class AuthSignUpCredentialsDto {
@@ -9,9 +10,6 @@ export class AuthSignUpCredentialsDto {
 
   @IsString()
   email: string;
-
-  @IsString()
-  birthDate: string;
 
   @IsString()
   @MinLength(8)

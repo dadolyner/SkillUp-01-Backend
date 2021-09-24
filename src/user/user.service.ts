@@ -1,3 +1,4 @@
+//User/Quote Service
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateQuoteDto } from './dto/create-quote.dto';
@@ -69,8 +70,8 @@ export class UserService {
   }
 
   //outputs user info without sensitive data
-  async getUserInfo(authSignupDto: AuthSignUpCredentialsDto, user: User) {
-    return this.userRepository.getUser(authSignupDto, user);
+  async getUserInfo(authSignupDto: AuthSignUpCredentialsDto) {
+    return this.userRepository.getUser(authSignupDto);
 
     /* const keys = Object.keys(found);
     keys.forEach((key) => {

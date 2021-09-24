@@ -1,3 +1,4 @@
+//Authorization Repository
 import {
   ConflictException,
   InternalServerErrorException,
@@ -12,7 +13,7 @@ import { AuthSignUpCredentialsDto } from './dto/auth-credentials-signup.dto';
 export class AuthRepository extends Repository<User> {
   //signup our user into the database
   async signUp(signupCredentials: AuthSignUpCredentialsDto): Promise<void> {
-    const { first_name, last_name, email, birthDate, username, password } =
+    const { first_name, last_name, email, username, password } =
       signupCredentials;
 
     const user = new User();
@@ -20,7 +21,6 @@ export class AuthRepository extends Repository<User> {
     user.last_name = last_name;
     user.username = username;
     user.email = email;
-    user.birthDate = birthDate;
     user.salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(password, user.salt);
 
@@ -39,8 +39,8 @@ export class AuthRepository extends Repository<User> {
   async validateUserPassword(
     userCredentialsDto: AuthLoginCredentialsDto,
   ): Promise<string> {
-    const { username, password } = userCredentialsDto;
-    const user = await this.findOne({ username });
+    const { email, password } = userCredentialsDto;
+    const user = await this.findOne({ email });
 
     if (user && (await user.validatePassword(password))) {
       return user.username;

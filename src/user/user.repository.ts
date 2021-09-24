@@ -1,3 +1,4 @@
+//User/Quote Repository
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 import { Quote } from '../entities/quote.entity';
@@ -28,12 +29,12 @@ export class UserRepository extends Repository<Quote> {
     return myQuote;
   }
 
-  async getUser(authSignupDto: AuthSignUpCredentialsDto, user: User) {
-    const { first_name, last_name, username, email, birthDate } = authSignupDto;
+  async getUser(authSignupDto: AuthSignUpCredentialsDto) {
+    const { first_name, last_name, username, email } = authSignupDto;
     const query = this.createQueryBuilder('user');
-    query.where({ user });
+    query.where({ username });
 
-    if (!first_name || !last_name || !username || !email || !birthDate) {
+    if (!first_name || !last_name || !username || !email) {
       throw new NotFoundException('User not found');
     }
 
@@ -49,12 +50,12 @@ export class UserRepository extends Repository<Quote> {
   async updatePassword(
     userCredentialsDto: AuthLoginCredentialsDto,
   ): Promise<void> {
-    const { username, password } = userCredentialsDto;
-    const user = await User.findOne({ username });
+    const { email, password } = userCredentialsDto;
+    const user = await User.findOne({ email });
 
     if (!user) {
       throw new NotFoundException(
-        `Unable to find user with Username "${username}".`,
+        `Unable to find user with Username "${email}".`,
       );
     } else {
       user.password = await this.hashPassword(password, user.salt);
