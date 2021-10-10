@@ -6,7 +6,6 @@ import { Quote } from '../entities/quote.entity';
 import { UserRepository } from './user.repository';
 import { User } from '../entities/user.entity';
 import { AuthLoginCredentialsDto } from 'src/auth/dto/auth-credentials-login.dto';
-import { AuthSignUpCredentialsDto } from 'src/auth/dto/auth-credentials-signup.dto';
 
 @Injectable()
 export class UserService {
@@ -21,11 +20,13 @@ export class UserService {
   }
 
   //return one specific quote
-  async getQuoteById(id: string, user: User): Promise<Quote> {
-    const found = await this.userRepository.findOne({ where: { id, user } });
+  async getQuoteById(user: User): Promise<Quote> {
+    const found = await this.userRepository.findOne({ where: { user } });
 
     if (!found) {
-      throw new NotFoundException(`Quote with ID "${id}" not found.`);
+      throw new NotFoundException(
+        `User "${user.username}" does not have a quote.`,
+      );
     }
 
     return found;
@@ -40,23 +41,25 @@ export class UserService {
   }
 
   //delete an existing quote
-  async deleteQuote(id: string, user: User): Promise<void> {
-    const result = await this.userRepository.delete({ id, user });
+  async deleteQuote(user: User): Promise<void> {
+    const result = await this.userRepository.delete({ user });
 
     if (result.affected === 0) {
-      throw new NotFoundException(`Unable to delete Quote with ID "${id}".`);
+      throw new NotFoundException(
+        `User "${user.username}" does not have a quote.`,
+      );
     }
   }
 
   //update user created quote
-  async updateQuote(id: string, quote: string, user: User): Promise<Quote> {
-    const myQuote = await this.getQuoteById(id, user);
+  async updateQuote(quote: string, user: User): Promise<Quote> {
+    const myQuote = await this.getQuoteById(user);
     myQuote.quote = Object.values(quote)[0];
     myQuote.user = user;
     await myQuote.save();
 
     if (!myQuote) {
-      throw new NotFoundException(`Unable to edit Quote with ID "${id}".`);
+      throw new NotFoundException(`Unable to edit Quote for user "${user}".`);
     }
 
     return myQuote;
@@ -70,14 +73,7 @@ export class UserService {
   }
 
   //outputs user info without sensitive data
-  async getUserInfo(authSignupDto: AuthSignUpCredentialsDto) {
-    return this.userRepository.getUser(authSignupDto);
-
-    /* const keys = Object.keys(found);
-    keys.forEach((key) => {
-      if (key == 'id' || key == 'salt' || key == 'password') {
-        delete found[key];
-      }
-    }); */
+  async getUserInfo(user: User) {
+    return this.userRepository.getUser(user);
   }
 }

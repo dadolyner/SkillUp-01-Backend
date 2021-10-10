@@ -4,8 +4,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
-  ParseUUIDPipe,
   Patch,
   Post,
   UseGuards,
@@ -19,9 +17,7 @@ import { UserService } from './user.service';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/entities/user.entity';
 import { AuthLoginCredentialsDto } from 'src/auth/dto/auth-credentials-login.dto';
-import { AuthSignUpCredentialsDto } from 'src/auth/dto/auth-credentials-signup.dto';
 
-@UseGuards(AuthGuard())
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
@@ -33,15 +29,14 @@ export class UserController {
   }
 
   //get request to return one specific quote
-  @Get('/:id')
-  getQuoteId(
-    @Param('id', new ParseUUIDPipe()) id: string,
-    @GetUser() user: User,
-  ): Promise<Quote> {
-    return this.userService.getQuoteById(id, user);
+  @UseGuards(AuthGuard())
+  @Get('/myQuote')
+  getQuoteId(@GetUser() user: User): Promise<Quote> {
+    return this.userService.getQuoteById(user);
   }
 
   //post request to create a new quote
+  @UseGuards(AuthGuard())
   @Post('/myQuote')
   @UsePipes(ValidationPipe)
   createQuote(
@@ -52,25 +47,21 @@ export class UserController {
   }
 
   //delete request to delete an existing quote
-  @Delete('/:id/myQuote/delete')
-  deleteQuote(
-    @Param('id', new ParseUUIDPipe()) id: string,
-    @GetUser() user: User,
-  ): Promise<void> {
-    return this.userService.deleteQuote(id, user);
+  @UseGuards(AuthGuard())
+  @Delete('/myQuote/delete')
+  deleteQuote(@GetUser() user: User): Promise<void> {
+    return this.userService.deleteQuote(user);
   }
 
   //update request to update an existing quote
-  @Patch('/:id/myQuote/edit')
-  updateQuote(
-    @Param('id', new ParseUUIDPipe()) id: string,
-    @Body() quote: string,
-    @GetUser() user: User,
-  ): Promise<Quote> {
-    return this.userService.updateQuote(id, quote, user);
+  @UseGuards(AuthGuard())
+  @Patch('/myQuote/edit')
+  updateQuote(@Body() quote: string, @GetUser() user: User): Promise<Quote> {
+    return this.userService.updateQuote(quote, user);
   }
 
   //update request for update password
+  @UseGuards(AuthGuard())
   @Patch('/me/update-password')
   updatePassword(
     @Body(ValidationPipe)
@@ -80,8 +71,9 @@ export class UserController {
   }
 
   //get user information
+  @UseGuards(AuthGuard())
   @Get('/me')
-  getUserInfo(authSignupDto: AuthSignUpCredentialsDto) {
-    return this.userService.getUserInfo(authSignupDto);
+  getUserInfo(user: User) {
+    return this.userService.getUserInfo(user);
   }
 }

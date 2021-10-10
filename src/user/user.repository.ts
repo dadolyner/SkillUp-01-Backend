@@ -9,7 +9,6 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { AuthSignUpCredentialsDto } from 'src/auth/dto/auth-credentials-signup.dto';
 
 @EntityRepository(Quote)
 export class UserRepository extends Repository<Quote> {
@@ -26,15 +25,28 @@ export class UserRepository extends Repository<Quote> {
     const { quote } = createQuoteDto;
     const myQuote = this.create({ quote, user });
     await this.save(myQuote);
+
+    //removes the password, salt and id keys from the user object
+    const mainKeys = Object.keys(myQuote);
+    const userKeys = Object.keys(user);
+    mainKeys.forEach((mainKey) => {
+      if (mainKey == 'user') {
+        userKeys.forEach((userKey) => {
+          if (userKey == 'password' || userKey == 'salt' || userKey == 'id') {
+            delete myQuote[mainKey][userKey];
+          }
+        });
+      }
+    }, this);
+
     return myQuote;
   }
 
-  async getUser(authSignupDto: AuthSignUpCredentialsDto) {
-    const { first_name, last_name, username, email } = authSignupDto;
+  async getUser(user: User) {
     const query = this.createQueryBuilder('user');
-    query.where({ username });
+    query.where({ user });
 
-    if (!first_name || !last_name || !username || !email) {
+    if (!user) {
       throw new NotFoundException('User not found');
     }
 
