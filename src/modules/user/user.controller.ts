@@ -12,11 +12,11 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateQuoteDto } from './dto/create-quote.dto';
-import { Quote } from '../entities/quote.entity';
+import { Quote } from '../../entities/quote.entity';
 import { UserService } from './user.service';
-import { GetUser } from 'src/auth/get-user.decorator';
+import { GetUser } from 'src/modules/auth/get-user.decorator';
 import { User } from 'src/entities/user.entity';
-import { AuthLoginCredentialsDto } from 'src/auth/dto/auth-credentials-login.dto';
+import { AuthLoginCredentialsDto } from 'src/modules/auth/dto/auth-credentials-login.dto';
 
 @Controller('user')
 export class UserController {

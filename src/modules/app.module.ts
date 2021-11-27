@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { typeOrmCOnfig } from './config/typeorm.config';
+import { typeOrmConfig } from '../config/typeorm.config';
 import { QuoteModule } from './user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeOrmCOnfig), AuthModule, QuoteModule],
+  imports: [TypeOrmModule.forRoot(typeOrmConfig), AuthModule, QuoteModule],
   controllers: [],
   providers: [],
 })
