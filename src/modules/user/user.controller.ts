@@ -73,7 +73,7 @@ export class UserController {
   //get user information
   @UseGuards(AuthGuard())
   @Get('/me')
-  getUserInfo(user: User) {
+  getUserInfo(@GetUser() user: User) {
     return this.userService.getUserInfo(user);
   }
 }

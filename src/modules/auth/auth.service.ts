@@ -20,7 +20,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  //return one specific quote
+  //return user by id
   async getUserById(id: string, user: User): Promise<User> {
     const found = await this.authRepository.findOne({ where: { id, user } });
 

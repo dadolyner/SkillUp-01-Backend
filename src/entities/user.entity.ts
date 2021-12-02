@@ -41,9 +41,9 @@ export class User extends BaseEntity {
   }
 
   //relation
-  @OneToMany(() => Vote, (vote) => vote.user)
+  @OneToMany(() => Vote, (vote) => vote.user, { onDelete: 'CASCADE' })
   votes: Vote[];
 
-  @OneToMany(() => Quote, (quote) => quote.user)
+  @OneToMany(() => Quote, (quote) => quote.user, { onDelete: 'CASCADE' })
   quote: Quote[];
 }

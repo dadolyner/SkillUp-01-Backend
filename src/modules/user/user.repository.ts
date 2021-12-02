@@ -42,6 +42,7 @@ export class UserRepository extends Repository<Quote> {
     return myQuote;
   }
 
+  //create function that returns all user info
   async getUser(user: User) {
     const query = this.createQueryBuilder('user');
     query.where({ user });
