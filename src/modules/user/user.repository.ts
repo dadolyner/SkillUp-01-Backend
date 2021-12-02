@@ -43,17 +43,22 @@ export class UserRepository extends Repository<Quote> {
   }
 
   //create function that returns all user info
-  async getUser(user: User) {
-    const query = this.createQueryBuilder('user');
-    query.where({ user });
+  async getUserInfo(user: User) {
+    const userInfo = this.create({ user });
+    const userKeys = Object.keys(userInfo.user);
 
-    if (!user) {
+    if (!userInfo) {
       throw new NotFoundException('User not found');
     }
 
     try {
-      const myUser = await query.getOne();
-      return myUser;
+      userKeys.forEach((userKey) => {
+        if (userKey == 'password' || userKey == 'salt') {
+          delete userInfo.user[userKey];
+        }
+      });
+
+      return userInfo;
     } catch (error) {
       throw new InternalServerErrorException();
     }

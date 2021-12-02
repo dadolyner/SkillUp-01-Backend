@@ -74,6 +74,6 @@ export class UserService {
 
   //outputs user info without sensitive data
   async getUserInfo(user: User) {
-    return this.userRepository.getUser(user);
+    return this.userRepository.getUserInfo(user);
   }
 }
