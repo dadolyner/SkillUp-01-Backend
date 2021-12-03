@@ -32,12 +32,12 @@ export class UserService {
     return found;
   }
 
-  //create a new quote
-  async createQuote(
+  //create or update user created quote
+  async createOrUpdateQuote(
     createQuoteDto: CreateQuoteDto,
     user: User,
   ): Promise<Quote> {
-    return this.userRepository.createQuote(createQuoteDto, user);
+    return this.userRepository.createOrUpdateQuote(createQuoteDto, user);
   }
 
   //delete an existing quote
@@ -49,20 +49,6 @@ export class UserService {
         `User "${user.username}" does not have a quote.`,
       );
     }
-  }
-
-  //update user created quote
-  async updateQuote(quote: string, user: User): Promise<Quote> {
-    const myQuote = await this.getQuoteById(user);
-    myQuote.quote = Object.values(quote)[0];
-    myQuote.user = user;
-    await myQuote.save();
-
-    if (!myQuote) {
-      throw new NotFoundException(`Unable to edit Quote for user "${user}".`);
-    }
-
-    return myQuote;
   }
 
   //updates user password

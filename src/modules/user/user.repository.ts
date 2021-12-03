@@ -18,28 +18,22 @@ export class UserRepository extends Repository<Quote> {
     return quotes;
   }
 
-  async createQuote(
+  //write a user repository function that will update a quote for a user
+  async createOrUpdateQuote(
     createQuoteDto: CreateQuoteDto,
     user: User,
   ): Promise<Quote> {
     const { quote } = createQuoteDto;
-    const myQuote = this.create({ quote, user });
-    await this.save(myQuote);
+    const myQuote = await this.findOne({ user });
 
-    //removes the password, salt and id keys from the user object
-    const mainKeys = Object.keys(myQuote);
-    const userKeys = Object.keys(user);
-    mainKeys.forEach((mainKey) => {
-      if (mainKey == 'user') {
-        userKeys.forEach((userKey) => {
-          if (userKey == 'password' || userKey == 'salt' || userKey == 'id') {
-            delete myQuote[mainKey][userKey];
-          }
-        });
-      }
-    }, this);
-
-    return myQuote;
+    if (!myQuote) {
+      const myQuote = this.create({ quote, user });
+      await this.save(myQuote);
+    } else {
+      myQuote.quote = quote;
+      await this.save(myQuote);
+      return myQuote;
+    }
   }
 
   //create function that returns all user info

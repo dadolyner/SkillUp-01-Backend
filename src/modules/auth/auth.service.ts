@@ -1,15 +1,10 @@
 //Authorization Service
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthLoginCredentialsDto } from './dto/auth-credentials-login.dto';
 import { AuthRepository } from './auth.repository';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './jwt/jwt-payload.interface';
-import { User } from 'src/entities/user.entity';
 import { AuthSignUpCredentialsDto } from './dto/auth-credentials-signup.dto';
 
 @Injectable()
@@ -19,17 +14,6 @@ export class AuthService {
     private authRepository: AuthRepository,
     private jwtService: JwtService,
   ) {}
-
-  //return user by id
-  async getUserById(id: string, user: User): Promise<User> {
-    const found = await this.authRepository.findOne({ where: { id, user } });
-
-    if (!found) {
-      throw new NotFoundException(`Quote with ID "${id}" not found.`);
-    }
-
-    return found;
-  }
 
   //signup - registration
   async signUp(signupCredentials: AuthSignUpCredentialsDto): Promise<void> {
