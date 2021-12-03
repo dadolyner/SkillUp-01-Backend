@@ -19,10 +19,7 @@ export class Quote extends BaseEntity {
   @Column()
   quote: string;
 
-  @ManyToOne(() => Quote, (quote) => quote.votes, { onDelete: 'CASCADE' })
-  manager: Quote;
-
-  @OneToMany(() => Vote, (vote) => vote.quotes)
+  @OneToMany(() => Vote, (vote) => vote.quote, { onDelete: 'CASCADE' })
   votes: Vote[];
 
   @ManyToOne(() => User, (user) => user.quote, { onDelete: 'CASCADE' })

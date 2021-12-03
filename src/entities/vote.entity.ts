@@ -15,8 +15,8 @@ export class Vote extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ default: 0 })
-  votes: number;
+  @Column()
+  vote: number;
 
   //relation
   @ManyToOne(() => User, (user) => user.votes, { onDelete: 'CASCADE' })
@@ -24,5 +24,5 @@ export class Vote extends BaseEntity {
   user: User;
 
   @ManyToOne(() => Quote, (quotes) => quotes.votes, { onDelete: 'CASCADE' })
-  quotes: Quote;
+  quote: Quote;
 }
