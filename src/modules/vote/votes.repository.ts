@@ -38,4 +38,14 @@ export class VoteRepository extends Repository<Vote> {
       return await this.save(myVote);
     }
   }
+
+  //function that will count all the votes for a quote
+  async countVotes(quote: Quote): Promise<number> {
+    const votes = await this.find({ quote });
+    let count = 0;
+    votes.forEach((vote) => {
+      count += vote.vote;
+    });
+    return count;
+  }
 }

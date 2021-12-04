@@ -2,17 +2,12 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
-  Param,
   Patch,
-  Post,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { CreateQuoteDto } from './dto/create-quote.dto';
-import { Quote } from '../../entities/quote.entity';
 import { UserService } from './user.service';
 import { GetUser } from 'src/modules/auth/get-user.decorator';
 import { User } from 'src/entities/user.entity';
@@ -21,34 +16,6 @@ import { AuthLoginCredentialsDto } from 'src/modules/auth/dto/auth-credentials-l
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
-
-  //get request that return all quotes
-  @Get('/list')
-  getQuotes(): Promise<Quote[]> {
-    return this.userService.getQuotes();
-  }
-
-  @Get('/quote/:id')
-  getQuoteById(@Param() id: string): Promise<Quote> {
-    return this.userService.getQuoteById(id);
-  }
-
-  //post request to create a new quote or update an existing quote
-  @UseGuards(AuthGuard())
-  @Post('/myquote')
-  updateQuote(
-    @Body() createQuoteDto: CreateQuoteDto,
-    @GetUser() user: User,
-  ): Promise<Quote> {
-    return this.userService.createOrUpdateQuote(createQuoteDto, user);
-  }
-
-  //delete request to delete an existing quote
-  @UseGuards(AuthGuard())
-  @Delete('/myquote/delete')
-  deleteQuote(@GetUser() user: User): Promise<void> {
-    return this.userService.deleteQuote(user);
-  }
 
   //update request for update password
   @UseGuards(AuthGuard())

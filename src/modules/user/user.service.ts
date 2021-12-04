@@ -1,8 +1,6 @@
 //User/Quote Service
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateQuoteDto } from './dto/create-quote.dto';
-import { Quote } from '../../entities/quote.entity';
 import { UserRepository } from './user.repository';
 import { User } from '../../entities/user.entity';
 import { AuthLoginCredentialsDto } from 'src/modules/auth/dto/auth-credentials-login.dto';
@@ -13,41 +11,6 @@ export class UserService {
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
   ) {}
-
-  //return all quotes
-  getQuotes(): Promise<Quote[]> {
-    return this.userRepository.getQuotes();
-  }
-
-  //return one specific quote
-  async getQuoteById(id: string): Promise<Quote> {
-    const quote = await this.userRepository.findOne(id);
-
-    if (!quote) {
-      throw new NotFoundException(`Quote with ID "${id}" not found`);
-    }
-
-    return quote;
-  }
-
-  //create or update user created quote
-  async createOrUpdateQuote(
-    createQuoteDto: CreateQuoteDto,
-    user: User,
-  ): Promise<Quote> {
-    return this.userRepository.createOrUpdateQuote(createQuoteDto, user);
-  }
-
-  //delete an existing quote
-  async deleteQuote(user: User): Promise<void> {
-    const result = await this.userRepository.delete({ user });
-
-    if (result.affected === 0) {
-      throw new NotFoundException(
-        `User "${user.username}" does not have a quote.`,
-      );
-    }
-  }
 
   //updates user password
   async updatePassword(
