@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Quote } from 'src/entities/quote.entity';
 import { User } from 'src/entities/user.entity';
+import { VoteRepository } from '../vote/votes.repository';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 import { QuoteRepository } from './quote.repository';
 
@@ -10,11 +11,18 @@ export class QuoteService {
   constructor(
     @InjectRepository(QuoteRepository)
     private quoteRepository: QuoteRepository,
+    private voteRepository: VoteRepository,
   ) {}
 
   //return all quotes
-  getQuotes(): Promise<Quote[]> {
-    return this.quoteRepository.getQuotes();
+  async getQuotes(): Promise<Quote[]> {
+    const quotes = this.quoteRepository.getQuotes();
+    for (let i = 0; i < (await quotes).length; i++) {
+      (await quotes).map((quote) =>
+        Object.assign(quote, { votes: 'count number' }),
+      );
+    }
+    return quotes;
   }
 
   //return one specific quote
