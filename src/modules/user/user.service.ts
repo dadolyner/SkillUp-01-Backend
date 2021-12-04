@@ -20,16 +20,14 @@ export class UserService {
   }
 
   //return one specific quote
-  async getQuoteById(user: User): Promise<Quote> {
-    const found = await this.userRepository.findOne({ where: { user } });
+  async getQuoteById(id: string): Promise<Quote> {
+    const quote = await this.userRepository.findOne(id);
 
-    if (!found) {
-      throw new NotFoundException(
-        `User "${user.username}" does not have a quote.`,
-      );
+    if (!quote) {
+      throw new NotFoundException(`Quote with ID "${id}" not found`);
     }
 
-    return found;
+    return quote;
   }
 
   //create or update user created quote

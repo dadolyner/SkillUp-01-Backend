@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
   UseGuards,
@@ -25,6 +26,11 @@ export class UserController {
   @Get('/list')
   getQuotes(): Promise<Quote[]> {
     return this.userService.getQuotes();
+  }
+
+  @Get('/quote/:id')
+  getQuoteById(@Param() id: string): Promise<Quote> {
+    return this.userService.getQuoteById(id);
   }
 
   //post request to create a new quote or update an existing quote
