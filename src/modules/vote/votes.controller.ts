@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Quote } from 'src/entities/quote.entity';
 import { User } from 'src/entities/user.entity';
 import { Vote } from 'src/entities/vote.entity';
-import { GetUser } from '../auth/get-user.decorator';
+import { GetUser } from '../auth/decorator/get-user.decorator';
 import { VoteService } from './votes.service';
 
 @Controller('vote')

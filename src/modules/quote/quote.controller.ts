@@ -10,7 +10,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Quote } from 'src/entities/quote.entity';
 import { User } from 'src/entities/user.entity';
-import { GetUser } from '../auth/get-user.decorator';
+import { GetUser } from '../auth/decorator/get-user.decorator';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 import { QuoteService } from './quote.service';
 

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from './user.service';
-import { GetUser } from 'src/modules/auth/get-user.decorator';
+import { GetUser } from 'src/modules/auth/decorator/get-user.decorator';
 import { User } from 'src/entities/user.entity';
 import { AuthLoginCredentialsDto } from 'src/modules/auth/dto/auth-credentials-login.dto';
 
