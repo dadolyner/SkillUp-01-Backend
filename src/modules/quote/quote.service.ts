@@ -17,14 +17,12 @@ export class QuoteService {
   ) {}
 
   //return all quotes
-  async getQuotes(): Promise<Quote[]> {
-    const quotes = this.quoteRepository.getQuotes();
-    for (let i = 0; i < (await quotes).length; i++) {
-      (await quotes).map(async (quote) =>
-        Object.assign(quote, {
-          votes: '123',
-        }),
-      );
+  async getQuotes(): Promise<any> {
+    const quotes = await this.quoteRepository.getQuotes();
+
+    for (let i = 0; i < quotes.length; i++) {
+      const votes = await this.voteRepository.countVotes(quotes[i]);
+      Object.assign(quotes[i], { votes: votes });
     }
     return quotes;
   }

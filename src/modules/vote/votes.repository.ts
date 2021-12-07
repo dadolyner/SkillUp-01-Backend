@@ -13,11 +13,13 @@ export class VoteRepository extends Repository<Vote> {
       vote.user = user;
       vote.quote = quote;
       vote.vote = 1;
+      this.removeKeys(myVote);
       return await this.save(vote);
     } else {
       myVote.user = user;
       myVote.quote = quote;
       myVote.vote = 1;
+      this.removeKeys(myVote);
       return await this.save(myVote);
     }
   }
@@ -30,11 +32,13 @@ export class VoteRepository extends Repository<Vote> {
       vote.user = user;
       vote.quote = quote;
       vote.vote = -1;
+      this.removeKeys(myVote);
       return await this.save(vote);
     } else {
       myVote.user = user;
       myVote.quote = quote;
       myVote.vote = -1;
+      this.removeKeys(myVote);
       return await this.save(myVote);
     }
   }
@@ -48,4 +52,21 @@ export class VoteRepository extends Repository<Vote> {
     });
     return count;
   }
+
+  //removes sensitive data from outputed object
+  removeKeys = (myVote) => {
+    const userKeys = Object.keys(myVote.user);
+    userKeys.forEach((userKey) => {
+      if (
+        userKey == 'first_name' ||
+        userKey == 'last_name' ||
+        userKey == 'username' ||
+        userKey == 'email' ||
+        userKey == 'password' ||
+        userKey == 'salt'
+      ) {
+        delete myVote.user[userKey];
+      }
+    });
+  };
 }

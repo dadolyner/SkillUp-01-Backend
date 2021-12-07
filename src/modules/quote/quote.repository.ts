@@ -9,7 +9,6 @@ export class QuoteRepository extends Repository<Quote> {
     //return all quotes and quote count from vote entity
     const query = this.createQueryBuilder('quote');
     const quotes = await query.getMany();
-
     return quotes;
   }
 
