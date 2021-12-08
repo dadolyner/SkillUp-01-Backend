@@ -13,7 +13,7 @@ export class VoteRepository extends Repository<Vote> {
       vote.user = user;
       vote.quote = quote;
       vote.vote = 1;
-      this.removeKeys(myVote);
+      this.removeKeys(vote);
       return await this.save(vote);
     } else {
       myVote.user = user;
@@ -32,7 +32,7 @@ export class VoteRepository extends Repository<Vote> {
       vote.user = user;
       vote.quote = quote;
       vote.vote = -1;
-      this.removeKeys(myVote);
+      this.removeKeys(vote);
       return await this.save(vote);
     } else {
       myVote.user = user;

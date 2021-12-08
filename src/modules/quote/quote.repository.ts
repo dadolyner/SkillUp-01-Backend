@@ -5,14 +5,14 @@ import { CreateQuoteDto } from './dto/create-quote.dto';
 
 @EntityRepository(Quote)
 export class QuoteRepository extends Repository<Quote> {
+  // function that returns all quotes
   async getQuotes(): Promise<Quote[]> {
-    //return all quotes and quote count from vote entity
     const query = this.createQueryBuilder('quote');
     const quotes = await query.getMany();
     return quotes;
   }
 
-  //write a user repository function that will update a quote for a user
+  // function that creates or updates a quote
   async createOrUpdateQuote(
     createQuoteDto: CreateQuoteDto,
     user: User,

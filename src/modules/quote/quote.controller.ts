@@ -18,7 +18,7 @@ import { QuoteService } from './quote.service';
 export class QuoteController {
   constructor(private quoteService: QuoteService) {}
 
-  //get request that return all quotes
+  // get request that return all quotes
   @Get('/list')
   getQuotes(): Promise<Quote[]> {
     return this.quoteService.getQuotes();
@@ -29,7 +29,7 @@ export class QuoteController {
     return this.quoteService.getQuoteById(id);
   }
 
-  //post request to create a new quote or update an existing quote
+  // post request to create a new quote or update an existing quote
   @UseGuards(AuthGuard())
   @Post('/myquote')
   updateQuote(
@@ -39,7 +39,7 @@ export class QuoteController {
     return this.quoteService.createOrUpdateQuote(createQuoteDto, user);
   }
 
-  //delete request to delete an existing quote
+  // delete request to delete an existing quote
   @UseGuards(AuthGuard())
   @Delete('/delete')
   deleteQuote(@GetUser() user: User): Promise<void> {

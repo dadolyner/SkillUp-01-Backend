@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Quote } from 'src/entities/quote.entity';
 import { User } from 'src/entities/user.entity';
-import { UserRepository } from '../user/user.repository';
 import { VoteRepository } from '../vote/votes.repository';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 import { QuoteRepository } from './quote.repository';
@@ -13,10 +12,9 @@ export class QuoteService {
     @InjectRepository(QuoteRepository)
     private quoteRepository: QuoteRepository,
     private voteRepository: VoteRepository,
-    private userRepository: UserRepository,
   ) {}
 
-  //return all quotes
+  // function tha returns all quotes
   async getQuotes(): Promise<any> {
     const quotes = await this.quoteRepository.getQuotes();
 
@@ -27,18 +25,16 @@ export class QuoteService {
     return quotes;
   }
 
-  //return one specific quote
+  // function that return one specific quote
   async getQuoteById(id: string): Promise<Quote> {
     const quote = await this.quoteRepository.findOne(id);
 
-    if (!quote) {
-      throw new NotFoundException(`Quote with ID "${id}" not found`);
-    }
+    if (!quote) throw new NotFoundException(`Quote with ID "${id}" not found`);
 
     return quote;
   }
 
-  //create or update user created quote
+  // function that creates or updates a quote
   async createOrUpdateQuote(
     createQuoteDto: CreateQuoteDto,
     user: User,
@@ -46,14 +42,12 @@ export class QuoteService {
     return this.quoteRepository.createOrUpdateQuote(createQuoteDto, user);
   }
 
-  //delete an existing quote
+  // function that deletes an existing quote
   async deleteQuote(user: User): Promise<void> {
     const result = await this.quoteRepository.delete({ user });
-
-    if (result.affected === 0) {
+    if (result.affected === 0)
       throw new NotFoundException(
         `User "${user.username}" does not have a quote.`,
       );
-    }
   }
 }
