@@ -15,12 +15,17 @@ export class QuoteService {
   ) {}
 
   // function tha returns all quotes
-  async getQuotes(): Promise<any> {
+  async getQuotes(): Promise<Quote[]> {
     const quotes = await this.quoteRepository.getQuotes();
 
     for (let i = 0; i < quotes.length; i++) {
       const votes = await this.voteRepository.countVotes(quotes[i]);
+      const user = await this.quoteRepository.findOne(quotes[i].id, {
+        relations: ['user', 'votes'],
+      });
+
       Object.assign(quotes[i], { votes: votes });
+      Object.assign(quotes[i], { userid: user.user.id });
     }
     return quotes;
   }
@@ -30,6 +35,16 @@ export class QuoteService {
     const quote = await this.quoteRepository.findOne(id);
 
     if (!quote) throw new NotFoundException(`Quote with ID "${id}" not found`);
+
+    return quote;
+  }
+
+  // find quote where userid is equal to the userid of the user
+  async getMyQuote(user: User): Promise<Quote> {
+    const quote = await this.quoteRepository.findOne({ user });
+
+    if (!quote)
+      throw new NotFoundException(`User "${user}" does not have a quote`);
 
     return quote;
   }
