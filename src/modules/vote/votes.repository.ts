@@ -7,7 +7,7 @@ import { Quote } from 'src/entities/quote.entity';
 export class VoteRepository extends Repository<Vote> {
   //upvote a selected quote
   async upVote(user: User, quote: Quote): Promise<Vote> {
-    const myVote = await this.findOne({ user });
+    const myVote = await this.findOne({ user, quote });
     if (!myVote) {
       const vote = new Vote();
       vote.user = user;
@@ -26,7 +26,7 @@ export class VoteRepository extends Repository<Vote> {
 
   //upvote a selected quote
   async downVote(user: User, quote: Quote): Promise<Vote> {
-    const myVote = await this.findOne({ user });
+    const myVote = await this.findOne({ user, quote });
     if (!myVote) {
       const vote = new Vote();
       vote.user = user;
@@ -41,16 +41,6 @@ export class VoteRepository extends Repository<Vote> {
       this.removeKeys(myVote);
       return await this.save(myVote);
     }
-  }
-
-  //function that will count all the votes for a quote
-  async countVotes(quote: Quote): Promise<number> {
-    const votes = await this.find({ quote });
-    let count = 0;
-    votes.forEach((vote) => {
-      count += vote.vote;
-    });
-    return count;
   }
 
   //removes sensitive data from outputed object

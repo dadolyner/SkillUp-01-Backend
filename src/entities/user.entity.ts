@@ -6,6 +6,7 @@ import {
   BaseEntity,
   Unique,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Vote } from './vote.entity';
@@ -44,6 +45,6 @@ export class User extends BaseEntity {
   @OneToMany(() => Vote, (vote) => vote.user, { onDelete: 'CASCADE' })
   votes: Vote[];
 
-  @OneToMany(() => Quote, (quote) => quote.user, { onDelete: 'CASCADE' })
-  quote: Quote[];
+  @OneToOne(() => Quote, (quote) => quote.user, { onDelete: 'CASCADE' })
+  quote: Quote;
 }

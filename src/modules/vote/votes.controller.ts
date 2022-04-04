@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Quote } from 'src/entities/quote.entity';
 import { User } from 'src/entities/user.entity';
@@ -20,11 +20,5 @@ export class VoteController {
   @Post('/:id/downvote')
   downVote(@GetUser() user: User, @Param() quote: Quote): Promise<Vote> {
     return this.voteService.downVote(user, quote);
-  }
-
-  // get vote count
-  @Get('/:id/vote-count')
-  voteCount(@Param() quote: Quote): Promise<number> {
-    return this.voteService.countVotes(quote);
   }
 }

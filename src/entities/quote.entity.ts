@@ -1,12 +1,12 @@
 //Quote entity
-import { Exclude } from 'class-transformer';
 import {
   BaseEntity,
   Column,
   Entity,
-  ManyToOne,
+  OneToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  JoinColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Vote } from './vote.entity';
@@ -22,7 +22,7 @@ export class Quote extends BaseEntity {
   @OneToMany(() => Vote, (vote) => vote.quote, { onDelete: 'CASCADE' })
   votes: Vote[];
 
-  @ManyToOne(() => User, (user) => user.quote, { onDelete: 'CASCADE' })
-  @Exclude({ toPlainOnly: true })
+  @OneToOne(() => User, (user) => user.quote, { onDelete: 'CASCADE' })
+  @JoinColumn()
   user: User;
 }

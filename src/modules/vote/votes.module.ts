@@ -6,9 +6,11 @@ import { VoteRepository } from './votes.repository';
 import { AuthModule } from '../auth/auth.module';
 import { UserService } from '../user/user.service';
 import { UserRepository } from '../user/user.repository';
+import { QuoteRepository } from '../quote/quote.repository';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([QuoteRepository]),
     TypeOrmModule.forFeature([VoteRepository]),
     TypeOrmModule.forFeature([UserRepository]),
     AuthModule,

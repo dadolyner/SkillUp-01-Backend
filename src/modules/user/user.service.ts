@@ -4,12 +4,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
 import { User } from '../../entities/user.entity';
 import { AuthLoginCredentialsDto } from 'src/modules/auth/dto/auth-credentials-login.dto';
+import { QuoteRepository } from '../quote/quote.repository';
+import { VoteRepository } from '../vote/votes.repository';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
+    private quoteRapository: QuoteRepository,
+    private voteRepository: VoteRepository,
   ) {}
 
   //updates user password
@@ -21,6 +25,26 @@ export class UserService {
 
   //outputs user info without sensitive data
   async getUserInfo(user: User) {
-    return this.userRepository.getUserInfo(user);
+    const userInfo = await this.userRepository
+      .createQueryBuilder()
+      .select([
+        'user.id',
+        'user.first_name',
+        'user.last_name',
+        'user.username',
+        'user.email',
+        'quote.id',
+        'quote.quote',
+        'vote.id',
+        'vote.vote',
+        'vote.quoteId',
+      ])
+      .from(User, 'user')
+      .innerJoin('user.votes', 'vote')
+      .innerJoin('user.quote', 'quote')
+      .where('user.id = :id', { id: user.id })
+      .getOne();
+
+    console.log(userInfo);
   }
 }

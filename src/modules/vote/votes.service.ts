@@ -35,15 +35,4 @@ export class VoteService {
 
     return this.voteRepository.downVote(user, votedQuote);
   }
-
-  //function that will count all the votes for a quote
-  async countVotes(quote: Quote): Promise<number> {
-    const votedQuote = await this.userRepository.findOne(quote.id);
-
-    if (!votedQuote) {
-      throw new NotFoundException(`Quote with ID "${quote.id}" not found`);
-    }
-
-    return this.voteRepository.countVotes(votedQuote);
-  }
 }

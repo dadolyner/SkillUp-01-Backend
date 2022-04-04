@@ -1,9 +1,9 @@
 //Vote entity
-import { Exclude } from 'class-transformer';
 import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -20,9 +20,10 @@ export class Vote extends BaseEntity {
 
   //relation
   @ManyToOne(() => User, (user) => user.votes, { onDelete: 'CASCADE' })
-  @Exclude({ toPlainOnly: true })
+  @JoinColumn()
   user: User;
 
   @ManyToOne(() => Quote, (quotes) => quotes.votes, { onDelete: 'CASCADE' })
+  @JoinColumn()
   quote: Quote;
 }
