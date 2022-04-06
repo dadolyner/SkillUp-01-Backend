@@ -18,12 +18,15 @@ export class Vote extends BaseEntity {
   @Column()
   vote: number;
 
+  @Column()
+  quoteId: string;
+
   //relation
   @ManyToOne(() => User, (user) => user.votes, { onDelete: 'CASCADE' })
   @JoinColumn()
   user: User;
 
-  @ManyToOne(() => Quote, (quotes) => quotes.votes, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Quote, (quote) => quote.votes, { onDelete: 'CASCADE' })
   @JoinColumn()
   quote: Quote;
 }

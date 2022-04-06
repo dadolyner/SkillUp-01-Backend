@@ -46,7 +46,11 @@ export class QuoteService {
 
   // find quote where userid is equal to the userid of the user
   async getMyQuote(user: User): Promise<Quote> {
-    const quote = await this.quoteRepository.findOne({ user });
+    const quote = await this.quoteRepository
+      .createQueryBuilder('quote')
+      .select(['quote.id', 'quote.quote'])
+      .where('quote.user = :user', { userId: user.id })
+      .getOne();
 
     if (!quote)
       throw new NotFoundException(`User "${user}" does not have a quote`);

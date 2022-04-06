@@ -45,6 +45,6 @@ export class UserService {
       .where('user.id = :id', { id: user.id })
       .getOne();
 
-    console.log(userInfo);
+    return userInfo;
   }
 }

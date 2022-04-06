@@ -29,6 +29,13 @@ export class QuoteController {
     return this.quoteService.getQuoteById(id);
   }
 
+  //get users quote
+  @UseGuards(AuthGuard())
+  @Get('/myquote')
+  getMyQuote(@GetUser() user: User): Promise<Quote> {
+    return this.quoteService.getMyQuote(user);
+  }
+
   // post request to create a new quote or update an existing quote
   @UseGuards(AuthGuard())
   @Post('/myquote')
