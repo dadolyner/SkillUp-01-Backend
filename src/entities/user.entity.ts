@@ -13,7 +13,7 @@ import { Vote } from './vote.entity';
 import { Quote } from './quote.entity';
 
 @Entity()
-@Unique(['username'])
+@Unique(['username', 'email'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
