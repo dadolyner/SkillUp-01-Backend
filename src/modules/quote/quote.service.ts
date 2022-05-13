@@ -29,7 +29,7 @@ export class QuoteService {
       ])
       .from(Quote, 'quote')
       .innerJoin('quote.user', 'user')
-      .innerJoin('quote.votes', 'vote')
+      .leftJoin('quote.votes', 'vote')
       .getMany();
 
     return quotes;
