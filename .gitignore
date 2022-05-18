@@ -2,6 +2,9 @@
 /dist
 /node_modules
 /.vscode
+/config
+/src/config
+/src/config/config.typeorm.ts
 
 # Logs
 logs
