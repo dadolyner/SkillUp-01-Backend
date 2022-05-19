@@ -2,7 +2,13 @@
 /dist
 /node_modules
 /.vscode
+<<<<<<< HEAD
 src/config/config.typeorm.ts
+=======
+/config
+/src/config
+/src/config/config.typeorm.ts
+>>>>>>> 5ee29aba0c12c783db6ff36af979ad5a1e79efc5
 
 # Logs
 logs
