@@ -2,10 +2,11 @@
 import {
   ConflictException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { AuthLoginCredentialsDto } from './dto/auth-credentials-login.dto';
-import { User } from '../../entities/user.entity';
+import { User } from 'src/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { AuthSignUpCredentialsDto } from './dto/auth-credentials-signup.dto';
 
@@ -33,6 +34,40 @@ export class AuthRepository extends Repository<User> {
         throw new InternalServerErrorException();
       }
     }
+  }
+
+  async updateUser(
+    signupCredentials: AuthSignUpCredentialsDto,
+    user: User,
+  ): Promise<User> {
+    const { first_name, last_name, email, username, password } =
+      signupCredentials;
+
+    const userInfo = await this.findOne(user);
+    console.log(userInfo);
+    return user;
+    // try {
+    //   if (!userInfo) {
+    //     throw new NotFoundException(
+    //       `Unable to find user with Email "${email}".`,
+    //     );
+    //   } else {
+    //     userInfo.first_name = first_name;
+    //     userInfo.last_name = last_name;
+    //     userInfo.username = username;
+    //     userInfo.email = email;
+    //     userInfo.salt = await bcrypt.genSalt();
+    //     userInfo.password = await this.hashPassword(password, user.salt);
+    //     await this.save(userInfo);
+    //     return userInfo;
+    //   }
+    // } catch (error) {
+    //   if (error.code == 23505) {
+    //     throw new ConflictException('Username already exist!');
+    //   } else {
+    //     throw new InternalServerErrorException();
+    //   }
+    // }
   }
 
   //validate inserted password

@@ -1,6 +1,16 @@
 //Authorization Controller
-import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Patch,
+  Post,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { User } from 'src/entities/user.entity';
 import { AuthService } from './auth.service';
+import { GetUser } from './decorator/get-user.decorator';
 import { AuthLoginCredentialsDto } from './dto/auth-credentials-login.dto';
 import { AuthSignUpCredentialsDto } from './dto/auth-credentials-signup.dto';
 
@@ -15,6 +25,17 @@ export class AuthController {
     authSignupCredentialsDto: AuthSignUpCredentialsDto,
   ): Promise<void> {
     return this.authService.signUp(authSignupCredentialsDto);
+  }
+
+  //post request for signup
+  @UseGuards(AuthGuard())
+  @Patch('/update')
+  updateUser(
+    @Body(ValidationPipe)
+    authSignupCredentialsDto: AuthSignUpCredentialsDto,
+    @GetUser() user: User,
+  ): Promise<User> {
+    return this.authService.updateUser(authSignupCredentialsDto, user);
   }
 
   //post request for signin

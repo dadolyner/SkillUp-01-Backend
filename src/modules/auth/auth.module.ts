@@ -14,7 +14,7 @@ import { JwtStrategy } from './jwt/jwt.strategy';
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'SkillUpArea51',
-      signOptions: { expiresIn: 3600 },
+      signOptions: { expiresIn: 604800 },
     }),
   ],
   controllers: [AuthController],
