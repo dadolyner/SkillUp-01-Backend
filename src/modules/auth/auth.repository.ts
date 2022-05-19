@@ -42,32 +42,32 @@ export class AuthRepository extends Repository<User> {
   ): Promise<User> {
     const { first_name, last_name, email, username, password } =
       signupCredentials;
-
     const userInfo = await this.findOne(user);
-    console.log(userInfo);
-    return user;
-    // try {
-    //   if (!userInfo) {
-    //     throw new NotFoundException(
-    //       `Unable to find user with Email "${email}".`,
-    //     );
-    //   } else {
-    //     userInfo.first_name = first_name;
-    //     userInfo.last_name = last_name;
-    //     userInfo.username = username;
-    //     userInfo.email = email;
-    //     userInfo.salt = await bcrypt.genSalt();
-    //     userInfo.password = await this.hashPassword(password, user.salt);
-    //     await this.save(userInfo);
-    //     return userInfo;
-    //   }
-    // } catch (error) {
-    //   if (error.code == 23505) {
-    //     throw new ConflictException('Username already exist!');
-    //   } else {
-    //     throw new InternalServerErrorException();
-    //   }
-    // }
+
+    if (!userInfo) {
+      throw new NotFoundException(
+        `Unable to find user with: "${signupCredentials}".`,
+      );
+    } else {
+      userInfo.first_name = first_name;
+      userInfo.last_name = last_name;
+      userInfo.username = username;
+      userInfo.email = email;
+      userInfo.salt = await bcrypt.genSalt();
+      userInfo.password = await this.hashPassword(password, userInfo.salt);
+
+      try {
+        await this.update(userInfo.id, userInfo);
+      } catch (error) {
+        if (error.code == 23505) {
+          throw new ConflictException('Username or email already exist!');
+        } else {
+          throw new InternalServerErrorException();
+        }
+      }
+
+      return userInfo;
+    }
   }
 
   //validate inserted password
