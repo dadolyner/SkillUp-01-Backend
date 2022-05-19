@@ -21,6 +21,7 @@ export class QuoteService {
     const quotes = this.quoteRepository
       .createQueryBuilder()
       .select([
+        'user.id',
         'user.first_name',
         'user.last_name',
         'quote.id',
