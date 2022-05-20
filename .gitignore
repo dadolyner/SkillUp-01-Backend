@@ -1,6 +1,10 @@
 # compiled output
 /dist
 /node_modules
+/.vscode
+
+/src/config
+/src/config/config.typeorm.ts
 
 # Logs
 logs
