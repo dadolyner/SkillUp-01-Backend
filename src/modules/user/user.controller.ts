@@ -15,8 +15,7 @@ export class UserController {
     return this.userService.getUserInfo(user);
   }
 
-  //get user information
-  @UseGuards(AuthGuard())
+  //get user information by its id
   @Get('/:id')
   getUserInfoById(@Param() userId: string) {
     return this.userService.getUserInfoById(userId);
