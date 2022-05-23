@@ -8,31 +8,31 @@ import { VoteRepository } from './votes.repository';
 
 @Injectable()
 export class VoteService {
-  constructor(
-    @InjectRepository(VoteRepository)
-    private voteRepository: VoteRepository,
-    private userRepository: UserRepository,
-  ) {}
+    constructor(
+        @InjectRepository(VoteRepository)
+        private voteRepository: VoteRepository,
+        private userRepository: UserRepository,
+    ) { }
 
-  //upvote a quote
-  async upVote(user: User, quote: Quote): Promise<Vote> {
-    const votedQuote = await this.userRepository.findOne(quote.id);
+    //upvote a quote
+    async upVote(user: User, quote: Quote): Promise<Vote> {
+        const votedQuote = await this.userRepository.findOne(quote.id);
 
-    if (!votedQuote) {
-      throw new NotFoundException(`Quote with ID "${quote.id}" not found`);
+        if (!votedQuote) {
+            throw new NotFoundException(`Quote with ID "${quote.id}" not found`);
+        }
+
+        return this.voteRepository.upVote(user, votedQuote);
     }
 
-    return this.voteRepository.upVote(user, votedQuote);
-  }
+    //downvote a quote
+    async downVote(user: User, quote: Quote): Promise<Vote> {
+        const votedQuote = await this.userRepository.findOne(quote.id);
 
-  //downvote a quote
-  async downVote(user: User, quote: Quote): Promise<Vote> {
-    const votedQuote = await this.userRepository.findOne(quote.id);
+        if (!votedQuote) {
+            throw new NotFoundException(`Quote with ID "${quote.id}" not found`);
+        }
 
-    if (!votedQuote) {
-      throw new NotFoundException(`Quote with ID "${quote.id}" not found`);
+        return this.voteRepository.downVote(user, votedQuote);
     }
-
-    return this.voteRepository.downVote(user, votedQuote);
-  }
 }

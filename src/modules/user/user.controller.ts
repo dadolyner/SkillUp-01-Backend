@@ -7,17 +7,17 @@ import { User } from 'src/entities/user.entity';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
-  //get user information
-  @UseGuards(AuthGuard())
-  @Get('/me')
-  getUserInfo(@GetUser() user: User) {
-    return this.userService.getUserInfo(user);
-  }
+    constructor(private userService: UserService) { }
+    //get user information
+    @UseGuards(AuthGuard())
+    @Get('/me')
+    getUserInfo(@GetUser() user: User) {
+        return this.userService.getUserInfo(user);
+    }
 
-  //get user information by its id
-  @Get('/:id')
-  getUserInfoById(@Param() userId: string) {
-    return this.userService.getUserInfoById(userId);
-  }
+    //get user information by its id
+    @Get('/:id')
+    getUserInfoById(@Param() userId: string) {
+        return this.userService.getUserInfoById(userId);
+    }
 }

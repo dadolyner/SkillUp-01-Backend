@@ -7,14 +7,14 @@ import { VoteModule } from './vote/votes.module';
 import { QuoteModule } from './quote/quote.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(typeOrmConfig),
-    AuthModule,
-    UserModule,
-    VoteModule,
-    QuoteModule,
-  ],
-  controllers: [],
-  providers: [],
+    imports: [
+        TypeOrmModule.forRoot(typeOrmConfig),
+        AuthModule,
+        UserModule,
+        VoteModule,
+        QuoteModule,
+    ],
+    controllers: [],
+    providers: [],
 })
-export class AppModule {}
+export class AppModule { }

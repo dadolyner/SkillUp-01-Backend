@@ -1,11 +1,11 @@
 import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  UseGuards,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Quote } from 'src/entities/quote.entity';
@@ -16,40 +16,40 @@ import { QuoteService } from './quote.service';
 
 @Controller('quote')
 export class QuoteController {
-  constructor(private quoteService: QuoteService) {}
+    constructor(private quoteService: QuoteService) { }
 
-  // get request that return all quotes
-  @Get('/list')
-  getQuotes(): Promise<Quote[]> {
-    return this.quoteService.getQuotes();
-  }
+    // get request that return all quotes
+    @Get('/list')
+    getQuotes(): Promise<Quote[]> {
+        return this.quoteService.getQuotes();
+    }
 
-  @Get('/:id')
-  getQuoteById(@Param() id: string): Promise<Quote> {
-    return this.quoteService.getQuoteById(id);
-  }
+    @Get('/:id')
+    getQuoteById(@Param() id: string): Promise<Quote> {
+        return this.quoteService.getQuoteById(id);
+    }
 
-  //get users quote
-  @UseGuards(AuthGuard())
-  @Get('/myquote')
-  getMyQuote(@GetUser() user: User): Promise<Quote> {
-    return this.quoteService.getMyQuote(user);
-  }
+    //get users quote
+    @UseGuards(AuthGuard())
+    @Get('/myquote')
+    getMyQuote(@GetUser() user: User): Promise<Quote> {
+        return this.quoteService.getMyQuote(user);
+    }
 
-  // post request to create a new quote or update an existing quote
-  @UseGuards(AuthGuard())
-  @Post('/myquote')
-  updateQuote(
-    @Body() createQuoteDto: CreateQuoteDto,
-    @GetUser() user: User,
-  ): Promise<Quote> {
-    return this.quoteService.createOrUpdateQuote(createQuoteDto, user);
-  }
+    // post request to create a new quote or update an existing quote
+    @UseGuards(AuthGuard())
+    @Post('/myquote')
+    updateQuote(
+        @Body() createQuoteDto: CreateQuoteDto,
+        @GetUser() user: User,
+    ): Promise<Quote> {
+        return this.quoteService.createOrUpdateQuote(createQuoteDto, user);
+    }
 
-  // delete request to delete an existing quote
-  @UseGuards(AuthGuard())
-  @Delete('/delete')
-  deleteQuote(@GetUser() user: User): Promise<void> {
-    return this.quoteService.deleteQuote(user);
-  }
+    // delete request to delete an existing quote
+    @UseGuards(AuthGuard())
+    @Delete('/delete')
+    deleteQuote(@GetUser() user: User): Promise<void> {
+        return this.quoteService.deleteQuote(user);
+    }
 }

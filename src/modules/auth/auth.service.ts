@@ -10,40 +10,40 @@ import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    @InjectRepository(AuthRepository)
-    private authRepository: AuthRepository,
-    private jwtService: JwtService,
-  ) {}
+    constructor(
+        @InjectRepository(AuthRepository)
+        private authRepository: AuthRepository,
+        private jwtService: JwtService,
+    ) { }
 
-  //signup - registration
-  async signUp(signupCredentials: AuthSignUpCredentialsDto): Promise<void> {
-    return this.authRepository.signUp(signupCredentials);
-  }
-
-  //signup - registration
-  async updateUser(
-    signupCredentials: AuthSignUpCredentialsDto,
-    user: User,
-  ): Promise<User> {
-    return this.authRepository.updateUser(signupCredentials, user);
-  }
-
-  //signin - login with jwt tokens
-  async logIn(
-    userCredentialsDto: AuthLoginCredentialsDto,
-  ): Promise<{ accesToken: string }> {
-    const username = await this.authRepository.validateUserPassword(
-      userCredentialsDto,
-    );
-
-    if (!username) {
-      throw new UnauthorizedException('Invalid credentials');
+    //signup - registration
+    async signUp(signupCredentials: AuthSignUpCredentialsDto): Promise<void> {
+        return this.authRepository.signUp(signupCredentials);
     }
 
-    const payload: JwtPayload = { username };
-    const accesToken = await this.jwtService.sign(payload);
+    //signup - registration
+    async updateUser(
+        signupCredentials: AuthSignUpCredentialsDto,
+        user: User,
+    ): Promise<User> {
+        return this.authRepository.updateUser(signupCredentials, user);
+    }
 
-    return { accesToken };
-  }
+    //signin - login with jwt tokens
+    async logIn(
+        userCredentialsDto: AuthLoginCredentialsDto,
+    ): Promise<{ accesToken: string }> {
+        const username = await this.authRepository.validateUserPassword(
+            userCredentialsDto,
+        );
+
+        if (!username) {
+            throw new UnauthorizedException('Invalid credentials');
+        }
+
+        const payload: JwtPayload = { username };
+        const accesToken = await this.jwtService.sign(payload);
+
+        return { accesToken };
+    }
 }

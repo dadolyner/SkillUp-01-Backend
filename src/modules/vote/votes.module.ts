@@ -9,13 +9,13 @@ import { UserRepository } from '../user/user.repository';
 import { QuoteRepository } from '../quote/quote.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([QuoteRepository]),
-    TypeOrmModule.forFeature([VoteRepository]),
-    TypeOrmModule.forFeature([UserRepository]),
-    AuthModule,
-  ],
-  providers: [VoteService, UserService],
-  controllers: [VoteController],
+    imports: [
+        TypeOrmModule.forFeature([QuoteRepository]),
+        TypeOrmModule.forFeature([VoteRepository]),
+        TypeOrmModule.forFeature([UserRepository]),
+        AuthModule,
+    ],
+    providers: [VoteService, UserService],
+    controllers: [VoteController],
 })
-export class VoteModule {}
+export class VoteModule { }

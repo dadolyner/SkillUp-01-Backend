@@ -5,8 +5,8 @@ import * as bcrypt from 'bcrypt';
 
 @EntityRepository(Quote)
 export class UserRepository extends Repository<Quote> {
-  //hash password
-  private hashPassword(password: string, salt: string) {
-    return bcrypt.hash(password, salt);
-  }
+    //hash password
+    private hashPassword(password: string, salt: string) {
+        return bcrypt.hash(password, salt);
+    }
 }
