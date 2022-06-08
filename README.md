@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # SkullUpMentor - Project 1. Quotastic Backend
 
 ### Table of Contents
