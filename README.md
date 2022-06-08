@@ -113,6 +113,3 @@ SOFTWARE.
 - Github - [@dadolyner](https://github.com/dadolyner)
 
 [Back To The Top](#Quotastic)
-=======
-
->>>>>>> ff14930f4644d18afedcfe1ace653a4e43619491
