@@ -4,9 +4,7 @@
 /.vscode
 Dockerfile
 .dockerignore
-
-/src/config
-/src/config/config.typeorm.ts
+.env
 
 # Logs
 logs

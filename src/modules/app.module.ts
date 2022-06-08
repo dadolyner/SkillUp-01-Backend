@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { typeOrmConfig } from 'src/config/config.typeorm';
+import { TypeOrmConfig } from 'src/config/config.typeorm';
 import { UserModule } from './user/user.module';
 import { VoteModule } from './vote/votes.module';
 import { QuoteModule } from './quote/quote.module';
 
 @Module({
     imports: [
-        TypeOrmModule.forRoot(typeOrmConfig),
+        TypeOrmConfig,
         AuthModule,
         UserModule,
         VoteModule,
