@@ -36,8 +36,6 @@ a quote.
 - Git
 - Github
 
-[Back To The Top](#SkullUpMentor - Project 1. Quotastic Backend)
-
 ---
 
 ## How To Use
@@ -74,12 +72,8 @@ $ npm run start:prod
 
 - Github - [@dadolyner](https://github.com/dadolyner)
 
-[Back To The Top](#SkullUpMentor - Project 1. Quotastic Backend)
-
 ---
 
 ## Author Info
 
 - Github - [@dadolyner](https://github.com/dadolyner)
-
-[Back To The Top](#SkullUpMentor - Project 1. Quotastic Backend)
