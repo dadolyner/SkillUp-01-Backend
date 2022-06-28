@@ -1,15 +1,12 @@
-import { Quote } from 'src/entities/quote.entity';
-import { User } from 'src/entities/user.entity';
+import { Quotes } from 'src/entities/quotes.entity';
+import { Users } from 'src/entities/users.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateQuoteDto } from './dto/create-quote.dto';
 
-@EntityRepository(Quote)
-export class QuoteRepository extends Repository<Quote> {
+@EntityRepository(Quotes)
+export class QuoteRepository extends Repository<Quotes> {
     // function that creates or updates a quote
-    async createOrUpdateQuote(
-        createQuoteDto: CreateQuoteDto,
-        user: User,
-    ): Promise<Quote> {
+    async createOrUpdateQuote(createQuoteDto: CreateQuoteDto, user: Users): Promise<Quotes> {
         const { quote } = createQuoteDto;
         const myQuote = await this.findOne({ user });
 

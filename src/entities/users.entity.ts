@@ -9,12 +9,12 @@ import {
     OneToOne,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Vote } from './vote.entity';
-import { Quote } from './quote.entity';
+import { Votes } from './votes.entity';
+import { Quotes } from './quotes.entity';
 
-@Entity()
-@Unique(['username', 'email'])
-export class User extends BaseEntity {
+@Entity('users')
+@Unique(['email'])
+export class Users extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
@@ -36,15 +36,21 @@ export class User extends BaseEntity {
     @Column()
     password: string;
 
+    // Relations
+    @OneToMany(() => Votes, (vote) => vote.user, { onDelete: 'CASCADE' })
+    votes: Votes[];
+
+    @OneToOne(() => Quotes, (quote) => quote.user, { onDelete: 'CASCADE' })
+    quote: Quotes;
+
+    // Validate users password
     async validatePassword(password: string): Promise<boolean> {
         const hash = await bcrypt.hash(password, this.salt);
         return hash === this.password;
     }
 
-    //relation
-    @OneToMany(() => Vote, (vote) => vote.user, { onDelete: 'CASCADE' })
-    votes: Vote[];
-
-    @OneToOne(() => Quote, (quote) => quote.user, { onDelete: 'CASCADE' })
-    quote: Quote;
+    // Hash password
+    async hashPassword(password: string, salt: string) {
+        return bcrypt.hash(password, salt);
+    }
 }

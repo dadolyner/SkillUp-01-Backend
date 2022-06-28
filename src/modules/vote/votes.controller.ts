@@ -1,8 +1,8 @@
 import { Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Quote } from 'src/entities/quote.entity';
-import { User } from 'src/entities/user.entity';
-import { Vote } from 'src/entities/vote.entity';
+import { Quotes } from 'src/entities/quotes.entity';
+import { Users } from 'src/entities/users.entity';
+import { Votes } from 'src/entities/votes.entity';
 import { GetUser } from '../auth/decorator/get-user.decorator';
 import { VoteService } from './votes.service';
 
@@ -10,15 +10,17 @@ import { VoteService } from './votes.service';
 export class VoteController {
     constructor(private voteService: VoteService) { }
 
+    // UpVote a quote with ID
     @UseGuards(AuthGuard())
     @Post('/:id/upvote')
-    upVote(@GetUser() user: User, @Param() quote: Quote): Promise<Vote> {
+    upVote(@GetUser() user: Users, @Param() quote: Quotes): Promise<Votes> {
         return this.voteService.upVote(user, quote);
     }
 
+    // DownVote a quote with ID
     @UseGuards(AuthGuard())
     @Post('/:id/downvote')
-    downVote(@GetUser() user: User, @Param() quote: Quote): Promise<Vote> {
+    downVote(@GetUser() user: Users, @Param() quote: Quotes): Promise<Votes> {
         return this.voteService.downVote(user, quote);
     }
 }

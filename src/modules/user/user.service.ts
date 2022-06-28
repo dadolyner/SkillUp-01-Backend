@@ -2,17 +2,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
-import { User } from '../../entities/user.entity';
+import { Users } from '../../entities/users.entity';
 
 @Injectable()
 export class UserService {
-    constructor(
-        @InjectRepository(UserRepository)
-        private userRepository: UserRepository,
-    ) { }
+    constructor(@InjectRepository(UserRepository) private userRepository: UserRepository) { }
 
     //outputs user info without sensitive data
-    async getUserInfo(user: User): Promise<User> {
+    async getUserInfo(user: Users): Promise<Users> {
         const userInfo = await this.userRepository
             .createQueryBuilder()
             .select([
@@ -27,7 +24,7 @@ export class UserService {
                 'vote.vote',
                 'vote.quoteId',
             ])
-            .from(User, 'user')
+            .from(Users, 'user')
             .leftJoin('user.quote', 'quote')
             .leftJoin('user.votes', 'vote')
             .where('user.id = :id', { id: user.id })
@@ -37,7 +34,7 @@ export class UserService {
     }
 
     //outputs selected user info by passing in his UUID without sensitive data
-    async getUserInfoById(userId: string): Promise<User> {
+    async getUserInfoById(userId: string): Promise<Users> {
         const userInfo = await this.userRepository
             .createQueryBuilder()
             .select([
@@ -52,7 +49,7 @@ export class UserService {
                 'vote.vote',
                 'vote.quoteId',
             ])
-            .from(User, 'user')
+            .from(Users, 'user')
             .leftJoin('user.quote', 'quote')
             .leftJoin('user.votes', 'vote')
             .where(userId)

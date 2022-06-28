@@ -1,15 +1,15 @@
-import { Vote } from 'src/entities/vote.entity';
+import { Votes } from 'src/entities/votes.entity';
 import { EntityRepository, Repository } from 'typeorm';
-import { User } from 'src/entities/user.entity';
-import { Quote } from 'src/entities/quote.entity';
+import { Users } from 'src/entities/users.entity';
+import { Quotes } from 'src/entities/quotes.entity';
 
-@EntityRepository(Vote)
-export class VoteRepository extends Repository<Vote> {
+@EntityRepository(Votes)
+export class VoteRepository extends Repository<Votes> {
     //upvote a selected quote
-    async upVote(user: User, quote: Quote): Promise<Vote> {
+    async upVote(user: Users, quote: Quotes): Promise<Votes> {
         const myVote = await this.findOne({ user, quote });
         if (!myVote) {
-            const vote = new Vote();
+            const vote = new Votes();
             vote.user = user;
             vote.quote = quote;
             vote.vote = 1;
@@ -25,10 +25,10 @@ export class VoteRepository extends Repository<Vote> {
     }
 
     //upvote a selected quote
-    async downVote(user: User, quote: Quote): Promise<Vote> {
+    async downVote(user: Users, quote: Quotes): Promise<Votes> {
         const myVote = await this.findOne({ user, quote });
         if (!myVote) {
-            const vote = new Vote();
+            const vote = new Votes();
             vote.user = user;
             vote.quote = quote;
             vote.vote = -1;
@@ -43,8 +43,8 @@ export class VoteRepository extends Repository<Vote> {
         }
     }
 
-    //removes sensitive data from outputed object
-    removeKeys = (myVote) => {
+    // Remove keys from the object
+    removeKeys = (myVote: Votes) => {
         const userKeys = Object.keys(myVote.user);
         userKeys.forEach((userKey) => {
             if (
